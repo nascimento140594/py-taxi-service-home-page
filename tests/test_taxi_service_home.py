@@ -6,12 +6,10 @@ from django.urls import reverse
 
 from taxi.models import Car, Manufacturer
 
-TestCase.fixtures = [
-    "taxi_service_db_data.json",
-]
-
 
 class HomePageTests(TestCase):
+    fixtures = ["taxi_service_db_data.json"]
+
     def test_index_count_content_correctly(self):
         response = self.client.get(reverse("taxi:index"))
         num_drivers = get_user_model().objects.count()
@@ -23,11 +21,17 @@ class HomePageTests(TestCase):
         self.assertTemplateUsed(response, "taxi/index.html")
         self.assertEqual(response.context["num_drivers"], num_drivers)
         self.assertEqual(response.context["num_cars"], num_cars)
-        self.assertEqual(response.context["num_manufacturers"], num_manufacturers)
+        self.assertEqual(
+            response.context["num_manufacturers"],
+            num_manufacturers,
+        )
 
 
 class IsStylesCSSExistTests(TestCase):
     def test_styles_exist(self):
-        file_exists = os.path.exists("static/css/styles.css")
+        base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        file_exists = os.path.exists(
+            os.path.join(base_dir, "static", "css", "styles.css")
+        )
 
         self.assertTrue(file_exists)

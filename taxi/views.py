@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-from .models import Driver, Manufacturer, Car
+from taxi.models import Car, Driver, Manufacturer
 
 
 def index(request):
@@ -14,4 +14,4 @@ def index(request):
         "num_cars": num_cars,
     }
 
-    return render(request, "taxi/index.html", context)
+    return render(request, "taxi/index.html", context=context)
